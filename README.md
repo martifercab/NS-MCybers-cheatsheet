@@ -78,6 +78,7 @@ Due to HSTS, some webpages are unaccesible when the attacks is performed. Here i
 - ericmonne.cat
 
 ## VPNs
+![routers](routers.png)
 ### IPSec with certificates
 
 - Create a new CA
