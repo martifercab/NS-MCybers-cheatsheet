@@ -77,8 +77,71 @@ Due to HSTS, some webpages are unaccesible when the attacks is performed. Here i
 - albertazemar.com
 - ericmonne.cat
 
+## VPNs
+### IPSec with certificates
 
+- Create a new CA
+```sh
+# /usr/lib/ssl/misc/CA.pl –newca
+```
+Enter the info asked by the previous command. 
 
+- Generate a pair of keys for R1 and a certificate request
+```sh
+# openssl req –new –keyout keypair<ID>.pem –out newreq<ID>.pem
+```
+
+- Sign and issue the certificate.
+```sh
+# openssl ca –in newreq<ID>.pem –out cert<ID>.pem
+```
+**Note that the Common Name must be different for each certificate since it identifies the owner of the certificate.**
+
+- Move the files to ipsec directory
+```sh
+$ mv cert<ID>.pem /etc/ipsec.d/certs
+$ mv cacert.pem /etc/ipsec.d/cacerts
+$ mv keypairR1.pem /etc/ipsec.d/private
+```
+- Decrypt the keypair file
+```sh
+$ openssl rsa –in keypair<ID>.pem –out keypair<ID>.pem
+```
+
+- Configuration of `ipsec.conf`
+
+```sh
+config setup
+    charondebug="all"
+    uniqueids = yes
+# Add connections here.
+conn myvpn
+    type=tunnel
+    auto=start
+    keyexchange=ikev1
+    authby=rsasig
+    right=10.0.2.20
+    rightsubnet=192.168.2.0/24
+    left=10.0.2.10
+    leftsubnet=192.168.1.0/24
+    leftcert=cert<ID>.pem
+    leftid=”C=ES, ST=Barcelona, O=UPC, OU=Telematics, CN=R1”
+    rightid=”C=ES, ST=Barcelona, O=UPC, OU=Telematics, CN=R2”
+    ike=aes256-sha1-modp3072
+    esp=aes256-sha1
+    aggressive=yes
+    keyingtries=%forever
+    ikelifetime=28800s
+    lifetime=3600s
+    dpddelay=30s
+    dpdtimeout=120s
+    dpdaction=restart
+```
+
+- configuration of `ipsec.secrets`
+```sh
+: RSA keypair<ID>.pem
+```
 # Mid-Term Retake
 
 ## Symmetric key
