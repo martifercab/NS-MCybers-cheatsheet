@@ -111,6 +111,7 @@ $ openssl rsa –in keypair<ID>.pem –out keypair<ID>.pem
 
 - Configuration of `ipsec.conf`
 
+**R1**
 ```sh
 config setup
     charondebug="all"
@@ -125,9 +126,9 @@ conn myvpn
     rightsubnet=192.168.2.0/24
     left=10.0.2.10
     leftsubnet=192.168.1.0/24
-    leftcert=cert<ID>.pem
-    leftid=”C=ES, ST=Barcelona, O=UPC, OU=Telematics, CN=R1”
-    rightid=”C=ES, ST=Barcelona, O=UPC, OU=Telematics, CN=R2”
+    leftcert=certR1.pem
+    leftid="C=ES, ST=Barcelona, O=UPC, OU=Telematica, CN=R1"
+    rightid="C=ES, ST=Barcelona, O=UPC, OU=Telematica, CN=R2"
     ike=aes256-sha1-modp3072
     esp=aes256-sha1
     aggressive=yes
@@ -138,11 +139,46 @@ conn myvpn
     dpdtimeout=120s
     dpdaction=restart
 ```
+**R2**
+```sh
+config setup
+    charondebug="all"
+    uniqueids = yes
+# Add connections here.
+conn myvpn
+        type=tunnel
+        auto=start
+        keyexchange=ikev1
+        authby=rsasig
+        right=10.0.2.20
+        rightsubnet=192.168.2.0/24
+        left=10.0.2.10
+        leftsubnet=192.168.1.0/24
+        rightcert=certR2.pem
+        rightid="C=ES, ST=Barcelona, O=UPC, OU=Telematica, CN=R2"
+        leftid="C=ES, ST=Barcelona, O=UPC, OU=Telematica, CN=R1"
+        ike=aes256-sha1-modp3072
+        esp=aes256-sha1
+        aggressive=yes
+        keyingtries=%forever
+        ikelifetime=28800s
+        lifetime=3600s
+        dpddelay=30s
+        dpdtimeout=120s
+        dpdaction=restart
+```
 
 - configuration of `ipsec.secrets`
+
+**R1**
 ```sh
-: RSA keypair<ID>.pem
+10.0.2.20 : RSA keypairR1.pem
 ```
+**R2**
+```sh
+10.0.2.10 : RSA keypairR2.pem
+```
+
 # Mid-Term Retake
 
 ## Symmetric key
