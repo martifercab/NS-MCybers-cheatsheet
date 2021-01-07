@@ -168,7 +168,7 @@ conn myvpn
         dpdaction=restart
 ```
 
-- configuration of `ipsec.secrets`
+- Configuration of `ipsec.secrets`
 
 **R1**
 ```sh
@@ -274,6 +274,18 @@ $ wget -O crl.der <CRL_URI>
 - Cast DEM to PEM
 ```sh
 $ openssl crl -inform DER -in crl.der -outform PEM -out crl.pem
+```
+
+## Client certificate
+
+- Create the client certificate
+```sh
+$ openssl req -new -keyout private/clientCertificate.key.pem -out requests/clientCertificate.csr.pem
+$ openssl ca -config openssl.cnf -extensions server_cert -in requests/clientCertificate.csr.pem -out certs/clientCertificate.crt.pem
+```
+- Creating P12 file
+```sh
+$ openssl pkcs12 -export -out clientCertificate.crt.p12 -in clientCertificate.crt.pem -inkey clientCertificate.key.pem passin pass:<PASSWORD> -passout pass:<PASSWORD>
 ```
 
 ## Certificate Verification Status
