@@ -276,7 +276,7 @@ $ wget -O crl.der <CRL_URI>
 $ openssl crl -inform DER -in crl.der -outform PEM -out crl.pem
 ```
 
-## Client certificate
+### Client certificate
 
 - Create the client certificate
 ```sh
