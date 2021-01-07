@@ -281,7 +281,7 @@ $ openssl crl -inform DER -in crl.der -outform PEM -out crl.pem
 - Create the client certificate
 ```sh
 $ openssl req -new -keyout private/clientCertificate.key.pem -out requests/clientCertificate.csr.pem
-$ openssl ca -config openssl.cnf -extensions server_cert -in requests/clientCertificate.csr.pem -out certs/clientCertificate.crt.pem
+$ openssl ca -config openssl.cnf -extensions usr_cert -in requests/clientCertificate.csr.pem -out certs/clientCertificate.crt.pem
 ```
 - Creating P12 file
 ```sh
