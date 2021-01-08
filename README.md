@@ -182,6 +182,24 @@ conn myvpn
 ## Firewalls
 ![firewalls](firewalls.png)
 
+- Enabling traffic from a subnet to a host
+```sh
+# iptables -t filter -A FORWARD -p tcp -s <SUBNET> -d <DEST.IP> --dport <DEST.PORT> -m state --state NEW, ESTABLISHED -j ACCEPT
+# iptables –A FORWARD –i <SRC.INTERFACE> –o <DST.INTERFACE> –mstate --state ESTABLISHED –j ACCEPT
+```
+
+- Enabling pinging from a subnet to a interface
+```sh
+# iptables -A INPUT -s <SUBNET> -i <INTERFACE> -p icmp -m state --state NEW,ESTABLISHED -j ACCEPT
+# iptables -A OUTPUT -d <SUBNET> -o <INTERFACE> -p icmp -m state --state ESTABLISHED -j ACCEPT
+```
+
+- Enabling SSH connection from one host to another one
+```sh
+# iptables -t filter -A INPUT -p tcp -s <IP FROM THE CONNECTOR> -d <IP OF THE HOST TO CONNECT> --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+# iptables -t filter -A OUTPUT -p tcp -s <IP OF THE HOST TO CONNECT> -d <IP FROM THE CONNECTOR> --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+```
+
 # Mid-Term Retake
 
 ## Symmetric key
