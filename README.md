@@ -179,6 +179,9 @@ conn myvpn
 10.0.2.10 : RSA keypairR2.pem
 ```
 
+## Firewalls
+![firewalls](firewalls.png)
+
 # Mid-Term Retake
 
 ## Symmetric key
